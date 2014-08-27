@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title>Hearthstone News</title>
+  {# <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/main.css" /> #}
+</head>
+<body>
+
+<header>
+  <p>
+    {{ user }}
+    {% if user.is_anonymous %}
+    <a href="{% url 'django.contrib.auth.views.login' %}">login</a>
+    {% else %}
+    <a href="{% url 'django.contrib.auth.views.logout' %}">logout</a>
+    {% endif %}
+  </p>
+</header>
+
+<a href="{% url 'home' %}">
+<h1>Hearthstone News</h1>
+</a>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>
