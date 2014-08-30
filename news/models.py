@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Count
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class NewsVoteManager(models.Manager):
@@ -39,3 +41,19 @@ class Vote(models.Model):
 
     class Meta:
         verbose_name = 'Vote'
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, unique=True, related_name='profile')
+    bio = models.TextField(null=True)
+
+    def __unicode__(self):
+        return '%s\'s profile' % self.user
+
+
+@receiver(post_save, sender=User)
+def create_profile(sender, **kwargs):
+    if kwargs.get('created', False):
+        UserProfile.objects.get_or_create(user=kwargs.get('instance'))
+
+post_save.connect(create_profile, sender=User)

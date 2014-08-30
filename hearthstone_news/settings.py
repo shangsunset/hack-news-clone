@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'news',
+    'registration',
 )
 
 
@@ -83,8 +84,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
 # Template directory
-TEMPLATE_DIRS = [os.path.join(os.path.dirname(__file__), 'templates')]
+TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = 'login'
