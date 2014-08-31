@@ -3,8 +3,10 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from news.views import (
     NewsListView,
+    NewsDetailView,
     UserProfileDetailView,
-    UserProfileUpdateView
+    UserProfileUpdateView,
+    NewsLinkCreateView
 )
 admin.autodiscover()
 
@@ -19,4 +21,8 @@ urlpatterns = patterns(
         name='profile'),
     url(r'^update-profile/$', login_required(UserProfileUpdateView.as_view()),
         name='update_profile'),
+    url(r'^news/create/$', login_required(NewsLinkCreateView.as_view()),
+        name='news_create'),
+    url(r'^news/(?P<pk>\d+)/$', NewsDetailView.as_view(),
+        name='news_detail'),
 )
