@@ -6,16 +6,17 @@ from news.views import (
     NewsDetailView,
     UserProfileDetailView,
     UserProfileUpdateView,
-    NewsLinkCreateView
+    NewsLinkCreateView,
+    NewsLinkUpdateView,
+    NewsLinkDeleteView
 )
 admin.autodiscover()
 
 urlpatterns = patterns(
     '',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^comments/', include('django.contrib.comments.urls')),
     url(r'^$', NewsListView.as_view(), name='home'),
-    # url(r'^login/$', 'django.contrib.auth.views.login'),
-    # url(r'^logout/$', 'django.contrib.auth.views.logout'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^users/(?P<slug>\w+)/$', UserProfileDetailView.as_view(),
         name='profile'),
@@ -25,4 +26,10 @@ urlpatterns = patterns(
         name='news_create'),
     url(r'^news/(?P<pk>\d+)/$', NewsDetailView.as_view(),
         name='news_detail'),
+    url(r"^news/update/(?P<pk>\d+)/$", login_required(
+        NewsLinkUpdateView.as_view()),
+        name="news_update"),
+    url(r"^news/delete/(?P<pk>\d+)/$", login_required(
+        NewsLinkDeleteView.as_view()),
+        name="news_delete"),
 )

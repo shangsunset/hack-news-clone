@@ -1,21 +1,18 @@
 from django.views.generic import ListView, DetailView
 from .models import News, UserProfile
 from django.contrib.auth import get_user_model
-from django.core.urlresolvers import reverse
 from django.views.generic.edit import (
     UpdateView,
-    CreateView
+    CreateView,
+    DeleteView
 )
+from django.core.urlresolvers import reverse, reverse_lazy
 
 
 class NewsListView(ListView):
     model = News
     queryset = News.with_votes.all()
     paginate_by = 5
-
-
-class NewsDetailView(DetailView):
-    model = News
 
 
 class UserProfileDetailView(DetailView):
@@ -43,3 +40,17 @@ class NewsLinkCreateView(CreateView):
     def form_valid(self, form):
         form.instance.publisher = self.request.user
         return super(NewsLinkCreateView, self).form_valid(form)
+
+
+class NewsDetailView(DetailView):
+    model = News
+
+
+class NewsLinkUpdateView(UpdateView):
+    model = News
+    fields = ['title', 'url']
+
+
+class NewsLinkDeleteView(DeleteView):
+    model = News
+    success_url = reverse_lazy('home')
