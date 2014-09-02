@@ -8,7 +8,8 @@ from news.views import (
     UserProfileUpdateView,
     NewsLinkCreateView,
     NewsLinkUpdateView,
-    NewsLinkDeleteView
+    NewsLinkDeleteView,
+    VoteFormView
 )
 admin.autodiscover()
 
@@ -32,4 +33,6 @@ urlpatterns = patterns(
     url(r"^news/delete/(?P<pk>\d+)/$", login_required(
         NewsLinkDeleteView.as_view()),
         name="news_delete"),
+    url(r'^vote/$', login_required(VoteFormView.as_view()),
+        name='vote'),
 )

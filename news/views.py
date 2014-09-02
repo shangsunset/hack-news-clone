@@ -1,10 +1,14 @@
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView
-from .models import News, UserProfile
+from .models import News, UserProfile, Vote
+from .forms import VoteForm
 from django.contrib.auth import get_user_model
 from django.views.generic.edit import (
     UpdateView,
     CreateView,
-    DeleteView
+    DeleteView,
+    FormView
 )
 from django.core.urlresolvers import reverse, reverse_lazy
 
@@ -54,3 +58,24 @@ class NewsLinkUpdateView(UpdateView):
 class NewsLinkDeleteView(DeleteView):
     model = News
     success_url = reverse_lazy('home')
+
+
+class VoteFormView(FormView):
+    model = Vote
+    form_class = VoteForm
+
+    def form_valid(self, form):
+        news = get_object_or_404(News, pk=form.data['news'])
+        user = self.request.user
+        votes = Vote.objects.filter(voter=user, news=news)
+        has_voted = (votes.count() > 0)
+
+        if not has_voted:
+            Vote.objects.create(voter=user, news=news)
+        else:
+            votes[0].delete()
+
+        return redirect('home')
+
+    def form_invalid(self, form):
+        return redirect('home')

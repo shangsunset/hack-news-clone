@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'news',
     'registration',
+    'debug_toolbar',
 )
 
 
